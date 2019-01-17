@@ -1,4 +1,5 @@
 # tree-ex
+基于iview的tree组件实现可编辑tree组件
 
 ## Project setup
 ```
