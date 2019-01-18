@@ -1,64 +1,34 @@
 <template>
-  <Tree :data="data5" :render="renderContent"></Tree>
+  <div>
+    <Button type="primary" @click="getData()">创建菜单</Button>
+    <Tree :data="data5" :render="renderContent" :empty-text="msg"></Tree>
+  </div>
 </template>
 <script>
     export default {
         data () {
             return {
                 data5: [
-                    {
-                        title: 'parent 1',
-                        expand: true,
-                        render: (h, { root, node, data }) => {
-                            return h('span', {
-                                style: {
-                                    display: 'inline-block',
-                                    width: '100%'
-                                }
-                            }, [
-                                h('span', [
-                                    h('Icon', {
-                                        props: {
-                                            type: 'ios-folder-outline'
-                                        },
-                                        style: {
-                                            marginRight: '8px'
-                                        }
-                                    }),
-                                    h('span', data.title)
-                                ]),
-                                h('span', {
-                                    style: {
-                                        display: 'inline-block',
-                                        float: 'right',
-                                        marginRight: '32px'
-                                    }
-                                }, [
-                                    h('Button', {
-                                        props: Object.assign({}, this.buttonProps, {
-                                            icon: 'ios-add',
-                                            type: 'primary'
-                                        }),
-                                        style: {
-                                            width: '64px'
-                                        },
-                                        on: {
-                                            click: () => { this.append(root, node, data) }
-                                        }
-                                    })
-                                ])
-                            ]);
-                        },
-                        children: []
-                    }
                 ],
                 buttonProps: {
                     type: 'default',
                     size: 'small',
-                }
+                },
+                msg:'点击按钮创建顶级菜单'
             }
         },
         methods: {
+            getData (){
+                this.data5.push({
+                    title: 'lavelMain',
+                    expand: true,
+                    edit:false,
+                    render: this.renderContent,
+                    key:Date.now(),
+                    children: []
+                })
+
+            },
             renderContent (h, { root, node, data }) {
                 let types = ["ios-analytics","ios-aperture","ios-appstore","md-aperture"]
                 let L = this.level (root,node)
@@ -160,7 +130,7 @@
                 }
                 const children = data.children || [];
                 children.push({
-                    title: 'level'+(this.level (root,node) || 0),
+                    title: 'level'+(this.level (root,node)+1 || 0),
                     expand: true,
                     edit:false,
 
@@ -168,6 +138,12 @@
                 this.$set(data || {}, 'children', children);
             },
             remove (root, node, data) {
+                if(!root || (data && data.key)){
+                    //顶层节点使用key来唯一标识，顶层的节点为data中的data5
+                    //下层节点使用data5中的children属性来标识
+                    this.data5 = this.data5.filter(n => n.key !== node.node.key)
+                    return
+                }
                 const parentKey = root.find(el => el === node).parent;
                 const parent = root.find(el => el.nodeKey === parentKey).node;
                 const index = parent.children.indexOf(data);
@@ -215,6 +191,9 @@
     }
 </script>
 <style>
+  .level0{
+    color: red;
+  }
   .level1{
     color: #E8559E;
   }
