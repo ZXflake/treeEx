@@ -14,7 +14,8 @@
                     type: 'default',
                     size: 'small',
                 },
-                msg:'点击按钮创建顶级菜单'
+                msg: '点击按钮创建顶级菜单',
+                types: ["ios-analytics","ios-aperture","ios-appstore","md-aperture"]
             }
         },
         methods: {
@@ -30,7 +31,6 @@
 
             },
             renderContent (h, { root, node, data }) {
-                let types = ["ios-analytics","ios-aperture","ios-appstore","md-aperture"]
                 let L = this.level (root,node)
                 let flag = node.node.edit === true
                 return h('span', {
@@ -44,7 +44,7 @@
                     }, [
                         h('Icon', {
                             props: {
-                                type: types[L || 0]
+                                type: this.types[L || 0]
                             },
                             style: {
                                 marginRight: '8px'
