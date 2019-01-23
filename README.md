@@ -1,6 +1,9 @@
 # tree-ex
 基于iview的tree组件实现可编辑tree组件
 
+## 示例
+点击 [查看预览](http://106.14.132.158:8080/tree/).
+
 ## Project setup
 ```
 npm install
